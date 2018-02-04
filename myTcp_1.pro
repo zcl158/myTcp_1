@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network
+QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,11 +15,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     server.cpp \
-    jlproto.cpp
+    jlproto.cpp \
+    zclTools.cpp
 
 HEADERS  += \
     server.h \
-    jlproto.h
+    jlproto.h \
+    zclTools.h
 
 FORMS    += \
     server.ui

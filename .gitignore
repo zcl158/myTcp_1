@@ -1,6 +1,7 @@
 /*
 !client.*
 !server.*
+!zclTools.*
 !main.c
 !myTcp_1.pro
 !.gitignore

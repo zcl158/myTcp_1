@@ -1,5 +1,6 @@
 #include "server.h"
 #include "ui_server.h"
+#include "zcltools.h"
 
 Server::Server(QWidget *parent) :
     QWidget(parent),
@@ -7,6 +8,7 @@ Server::Server(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->flushLocalIP();
     ui->serverIP_comboBox->installEventFilter(this);
 
     ui->input_lineEdit->setValidator((new QRegExpValidator(QRegExp("^[0-9a-fA-F\u0020]+$"),this)));
@@ -22,19 +24,25 @@ bool Server::eventFilter(QObject *obj, QEvent *event)
     if(event->type() == QEvent::MouseButtonPress)
     {
        if (obj == ui->serverIP_comboBox)    //插入本地IP地址
-        {
-             ui->serverIP_comboBox->clear();
-             QList<QHostAddress> IPlist = QNetworkInterface::allAddresses();
-             foreach (QHostAddress IP, IPlist)
-             {
-                if(IP.protocol()==QAbstractSocket::IPv4Protocol)
-                    ui->serverIP_comboBox->addItem (IP.toString());
-             }
+       {
+            this->flushLocalIP();
        }
     }
 
     return QWidget::eventFilter(obj, event);
 }
+
+void Server::flushLocalIP()
+{
+     ui->serverIP_comboBox->clear();
+     QList<QHostAddress> IPlist = QNetworkInterface::allAddresses();
+     foreach (QHostAddress IP, IPlist)
+     {
+        if(IP.protocol()==QAbstractSocket::IPv4Protocol)
+            ui->serverIP_comboBox->addItem (IP.toString());
+     }
+}
+
 
 
 //服务器端读取信息
@@ -86,7 +94,7 @@ void Server::on_listen_Button_clicked()
             close ();
         }
         else {
-            connect (tcpServer, SIGNAL(newConnection()), this, SLOT(screateServerSocket())); //有新的连接到来，则开始创建套接字
+            connect (tcpServer, SIGNAL(newConnection()), this, SLOT(NewConnected())); //有新的连接到来，则开始创建套接字
 
             flag = 1;
         }
@@ -117,7 +125,7 @@ void Server::on_listen_Button_clicked()
 
 
 //服务器端创建套接字
-void Server::screateServerSocket()
+void Server::NewConnected()
 {
 
     clientSocket = tcpServer->nextPendingConnection();
@@ -126,10 +134,9 @@ void Server::screateServerSocket()
     connect(clientSocket, SIGNAL(readyRead()), this, SLOT(serverRecv()));
 
     ui->send_Browser->insertPlainText("\n");
-    ui->send_Browser->insertPlainText(clientSocket->peerAddress().toString());
-    ui->send_Browser->insertPlainText(":");
-    ui->send_Browser->insertPlainText(QString::number((int)clientSocket->peerPort()));
-    ui->send_Browser->insertPlainText("连接");
+    ui->send_Browser->insertPlainText(QString::asprintf("%s:%d 连接",
+                        clientSocket->peerAddress().toString().toStdString().c_str(),
+                        clientSocket->peerPort()));
 }
 
 void Server::ClientDisconn()
@@ -137,10 +144,10 @@ void Server::ClientDisconn()
     clientSocket->close();
 
     ui->send_Browser->insertPlainText("\n");
-    ui->send_Browser->insertPlainText(clientSocket->peerAddress().toString());
-    ui->send_Browser->insertPlainText(":");
-    ui->send_Browser->insertPlainText(QString::number((int)clientSocket->peerPort()));
-    ui->send_Browser->insertPlainText("断开");
+
+    ui->send_Browser->insertPlainText(QString::asprintf("%s:%d 断开",
+                        clientSocket->peerAddress().toString().toStdString().c_str(),
+                        clientSocket->peerPort()));
 }
 
  //服务器端错误提示
@@ -166,16 +173,14 @@ void Server::on_send_Button_clicked()
  //   QByteArray txbuff =QByteArray::fromHex( ui->input_lineEdit->text().toLatin1());
     QByteArray txbuff;
     QString temp = ui->input_lineEdit->text();
-    QString tmp;
-    for(int i =0;i<temp.count();i++)
-    {
-        if(temp.at(i) == ' ')
-        {
-            break;
-        }
-        temp =  temp.at(i);
-
-    }
+    txbuff.clear();
+    zclTools::strToHex(temp.toStdString().c_str(), txbuff);
     this->serverSend( txbuff);
-     ui->input_lineEdit->clear();
+    ui->input_lineEdit->clear();
 }
+
+
+
+
+
+
