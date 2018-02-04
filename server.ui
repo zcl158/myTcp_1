@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Server</class>
+ <widget class="QWidget" name="Server">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>588</width>
+    <height>309</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>服务器</string>
+  </property>
+  <widget class="QTextBrowser" name="send_Browser">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>40</y>
+     <width>231</width>
+     <height>192</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="recv_Browser">
+   <property name="geometry">
+    <rect>
+     <x>268</x>
+     <y>40</y>
+     <width>311</width>
+     <height>191</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>275</y>
+     <width>541</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLineEdit" name="input_lineEdit"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="send_Button">
+      <property name="text">
+       <string>发送</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="sCleanpushButton">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>230</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>清  空</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>0</y>
+     <width>422</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>服务器地址</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="serverIP_comboBox">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>127.0.0.1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>124.243.202.5</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>端口</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="serverPortlineEdit">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>18901</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="listen_Button">
+      <property name="text">
+       <string>侦  听</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
